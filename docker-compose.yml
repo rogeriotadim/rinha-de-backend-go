@@ -3,10 +3,9 @@ version: "3.7"
 services:
   app:
     container_name: app01
-    build: .
     image: go-rt-dev:1.20.3
     volumes:
-      - ./src:/go/src
+      - ./src:/app
   #   env_file: .env.docker
   #   depends_on:
   #     db:
