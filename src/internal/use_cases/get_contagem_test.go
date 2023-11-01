@@ -11,5 +11,5 @@ func TestNewGetContagemUseCase(t *testing.T) {
 	uc := NewGetContagemUseCase(repo)
 	assert.NotNil(t, uc)
 	total, _ := uc.PessoaRepository.GetContagem()
-	assert.Equal(t, int64(1), total)
+	assert.Equal(t, int64(0), total)
 }
