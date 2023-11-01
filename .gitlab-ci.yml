@@ -20,6 +20,7 @@ static-test: &test
   
   script:
     - cd src
+    - ls -l
     - go test */***
   only:
     - develop
