@@ -1,0 +1,37 @@
+stages:
+  - static-test
+  - build
+  - integration-test
+  - deploy
+
+.scriptDebug: &scriptDebug
+    - echo "CI_JOB_NAME >>> ${CI_JOB_NAME}"
+    - echo "CI_JOB_STAGE >>> ${CI_JOB_STAGE}"
+
+
+static-test: &test
+  stage: static-test
+  script: *scriptDebug
+  only:
+    - develop
+    - /^feature-.*$/
+
+build:
+  stage: build
+  script: *scriptDebug
+  only:
+    - develop
+
+integration-test:
+  <<: *test
+  stage: integration-test
+  only:
+    - develop
+
+deploy:
+  stage: deploy
+  script: *scriptDebug
+  environment:
+    name: develop
+  only:
+    - develop
