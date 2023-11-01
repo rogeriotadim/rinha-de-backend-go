@@ -19,8 +19,8 @@ static-test: &test
   image: harbor.k8sd-hom.prevnet/mirror/golang:1.20.3-bullseye
   
   script:
-    - pwd
-    - ls -l
+    - cd src
+    - go test */***
   only:
     - develop
     - /^feature-.*$/
