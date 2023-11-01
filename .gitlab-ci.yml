@@ -20,6 +20,7 @@ static-test: &test
   
   script:
     - go env
+    - pwd
   only:
     - develop
     - /^feature-.*$/
