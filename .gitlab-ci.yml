@@ -16,7 +16,7 @@ stages:
 
 static-test: &test
   stage: static-test
-  image: harbor.k8sd-hom.prevnet/mirror/golang:1.20.3-bullseye
+  image: harbor.k8sd-hom.prevnet/mirror/golang/go-rt-dev:1.20.3
   
   script:
     - cd src
