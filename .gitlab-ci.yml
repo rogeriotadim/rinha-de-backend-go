@@ -11,7 +11,10 @@ stages:
 
 static-test: &test
   stage: static-test
-  script: *scriptDebug
+  image: go:1.20.3
+  
+  script:
+    - go --help
   only:
     - develop
     - /^feature-.*$/
