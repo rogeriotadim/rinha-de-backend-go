@@ -39,9 +39,9 @@ integration-test:
   stage: integration-test
   script:
     - cd src
-    - go test ./... -run _test_integration\.go$
+    - go test ./... -run Integration
   only:
-    - develop
+    - staging
 
 deploy-dev: &deploy
   variables:
