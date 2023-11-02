@@ -44,6 +44,8 @@ integration-test:
     - develop
 
 deploy-dev: &deploy
+  variables:
+    CNAME: dev-rdb.k8sd.hom.df.cloud.dataprev.gov.br
   stage: deploy
   script: *scriptDebug
   environment:
@@ -54,11 +56,20 @@ deploy-dev: &deploy
 release-test: &deploy
   <<: *test
   variables:
-    CNAME: $CI_COMMIT_REF_SLUG.rdb.k8sd.hom.df.cloud.dataprev.gov.br
+    CNAME: $CI_COMMIT_REF_SLUG-rdb.k8sd.hom.df.cloud.dataprev.gov.br
   stage: release
   script: *scriptDebug
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     url: http://${CNAME}/contagem
+    on_stop: turnoff-environemnt
   only:
     - /^release-.*$/
+
+turnoff-environemnt:
+  <<: *deploy
+  when: manual
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    url: http://${CNAME}/contagem
+    on_stop: turnoff-environemnt
