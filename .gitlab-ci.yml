@@ -20,7 +20,7 @@ static-test: &test
   
   script:
     - cd src
-    - go test ./...
+    - go test ./... -skip Integration
   only:
     - develop
     - /^feature-.*$/
@@ -34,6 +34,9 @@ build:
 integration-test:
   <<: *test
   stage: integration-test
+  script:
+    - cd src
+    - go test ./... -run _test_integration\.go$
   only:
     - develop
 
