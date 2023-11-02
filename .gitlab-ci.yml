@@ -7,10 +7,12 @@ stages:
   - static-test
   - build
   - integration-test
+  - release
   - deploy
 
 .scriptDebug: &scriptDebug
     - echo "CI_JOB_NAME >>> ${CI_JOB_NAME}"
+    - echo "CI_JOB_STAGE >>> ${CI_JOB_STAGE}"
     - echo "CI_JOB_STAGE >>> ${CI_JOB_STAGE}"
 
 
@@ -19,11 +21,13 @@ static-test: &test
   image: harbor.k8sd-hom.prevnet/mirror/golang:1.20.3-build-rdb
   
   script:
+    - *scriptDebug
     - cd src
     - go test ./... -skip Integration
   only:
     - develop
     - /^feature-.*$/
+    - /^release-.*$/
 
 build:
   stage: build
@@ -40,10 +44,19 @@ integration-test:
   only:
     - develop
 
-deploy:
+deploy-dev: &deploy
   stage: deploy
   script: *scriptDebug
   environment:
     name: develop
   only:
     - develop
+
+release-test: &deploy
+  <<: *test
+  variables:
+    CNAME: $CI_COMMIT_REF_SLUG.rdb.k8sd.hom.df.cloud.dataprev.gov.br
+  stage: release
+  script: *scriptDebug
+  only:
+    - /^release-.*$/
