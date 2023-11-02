@@ -72,4 +72,4 @@ turnoff-environemnt:
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     url: http://${CNAME}/contagem
-    on_stop: turnoff-environemnt
+    action: stop
