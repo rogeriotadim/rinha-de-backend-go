@@ -35,7 +35,8 @@ build:
 
 deploy-dev: &deploy
   variables:
-    CNAME: dev-rdb.k8sd.hom.df.cloud.dataprev.gov.br
+    CNAME: dev-rdb.${K8SD_DOMAIN}
+    GIT_STRATEGY: none
   stage: deploy
   script: *scriptDebug
   environment:
@@ -55,7 +56,7 @@ integration-test:
 release-test: &deploy
   <<: *test
   variables:
-    CNAME: $CI_COMMIT_REF_SLUG-rdb.k8sd.hom.df.cloud.dataprev.gov.br
+    CNAME: $CI_COMMIT_REF_SLUG-rdb.${K8SD_DOMAIN}
     GIT_STRATEGY: none
   stage: release
   script: *scriptDebug
