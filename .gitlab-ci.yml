@@ -13,8 +13,7 @@ stages:
 .scriptDebug: &scriptDebug
     - echo "CI_JOB_NAME >>> ${CI_JOB_NAME}"
     - echo "CI_JOB_STAGE >>> ${CI_JOB_STAGE}"
-    - echo "CI_JOB_STAGE >>> ${CI_JOB_STAGE}"
-
+    - echo "CI_COMMIT_REF_SLUG >>> ${CI_COMMIT_REF_SLUG}"
 
 static-test: &test
   stage: static-test
