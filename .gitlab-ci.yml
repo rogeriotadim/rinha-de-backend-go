@@ -1,6 +1,7 @@
 default:
   tags:
     - docker-ci
+  image: harbor.k8sd-hom.prevnet/mirror/golang:1.20.3-build-rdb
 
 stages:
   - static-test
@@ -16,8 +17,6 @@ stages:
 
 static-test: &test
   stage: static-test
-  image: harbor.k8sd-hom.prevnet/mirror/golang:1.20.3-build-rdb
-  
   script:
     - *scriptDebug
     - cd src
