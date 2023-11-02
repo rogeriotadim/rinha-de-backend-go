@@ -2,13 +2,12 @@ default:
   tags:
     - docker-ci
 
-
 stages:
   - static-test
   - build
+  - deploy
   - integration-test
   - release
-  - deploy
 
 .scriptDebug: &scriptDebug
     - echo "CI_JOB_NAME >>> ${CI_JOB_NAME}"
@@ -34,15 +33,6 @@ build:
   only:
     - develop
 
-integration-test:
-  <<: *test
-  stage: integration-test
-  script:
-    - cd src
-    - go test ./... -run Integration
-  only:
-    - staging
-
 deploy-dev: &deploy
   variables:
     CNAME: dev-rdb.k8sd.hom.df.cloud.dataprev.gov.br
@@ -53,10 +43,20 @@ deploy-dev: &deploy
   only:
     - develop
 
+integration-test:
+  <<: *test
+  stage: integration-test
+  script:
+    - cd src
+    - go test ./... -run Integration
+  only:
+    - staging
+
 release-test: &deploy
   <<: *test
   variables:
     CNAME: $CI_COMMIT_REF_SLUG-rdb.k8sd.hom.df.cloud.dataprev.gov.br
+    GIT_STRATEGY: none
   stage: release
   script: *scriptDebug
   environment:
