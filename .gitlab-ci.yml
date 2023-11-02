@@ -57,5 +57,8 @@ release-test: &deploy
     CNAME: $CI_COMMIT_REF_SLUG.rdb.k8sd.hom.df.cloud.dataprev.gov.br
   stage: release
   script: *scriptDebug
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    url: http://${CNAME}/contagem
   only:
     - /^release-.*$/
