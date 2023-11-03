@@ -12,19 +12,27 @@ services:
   #       condition: service_healthy
   #       restart: true      
   #   command: bash -c "sleep infinity"
-  # db:
-  #   container_name: binodb
-  #   image: mysql:8
-  #   restart: always
-  #   env_file: .env.docker
-  #   volumes:
-  #     - ./db:/docker-entrypoint-initdb.d
-  #   ports:
-  #     - 0.0.0.0:3306:3306
-  #   healthcheck:
-  #     test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 20
-  #     start_period: 15s
+  db: # Banco de dados
+    image: postgres
+    hostname: db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 123@Mudar
+      POSTGRES_DB: rinha-de-backend
+    volumes:
+      - ./config/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./config/postgresql.conf:/docker-entrypoint-initdb.d/postgresql.conf
+    command: postgres -c config_file=/docker-entrypoint-initdb.d/postgresql.conf
+    # network_mode: host
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.9'
+          memory: '1.4GB'
   
