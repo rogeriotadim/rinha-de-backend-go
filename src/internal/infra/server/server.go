@@ -6,9 +6,19 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+type WebServer struct {
+	App *fiber.App
+}
+
+func NewWebServer(app *fiber.App) *WebServer {
+	ch := NewContagemHandler()
+
+	app.Get("/contagem-pessoas", ch.ContagemPessoas)
+	return &WebServer{App: app}
+}
+
 func Run() {
 	ph := NewPessoaHandler()
-	ch := NewContagemHandler()
 
 	config := fiber.Config{
 		ServerHeader: "rinha de backend", // add custom server header
@@ -21,7 +31,6 @@ func Run() {
 	// app.Get("/contagem-pessoas", func(c *fiber.Ctx) error {
 	// 	return c.SendString("0")
 	// })
-	app.Get("/contagem-pessoas", ch.ContagemPessoas)
 
 	log.Fatal(app.Listen(":3000"))
 }
