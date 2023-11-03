@@ -17,7 +17,7 @@ services:
     hostname: db
     environment:
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: 123@Mudar
+      POSTGRES_PASSWORD: 123Mudar
       POSTGRES_DB: rinha-de-backend
     volumes:
       - ./config/init.sql:/docker-entrypoint-initdb.d/init.sql
