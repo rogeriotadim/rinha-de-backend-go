@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"os"
 
 	"github.com/rogeriotadim/rinha-de-backend-go/cmd/configs"
 	"github.com/rogeriotadim/rinha-de-backend-go/internal/infra/database"
@@ -14,14 +12,6 @@ import (
 )
 
 func main() {
-	// Get the current working directory
-	currentDir, err := os.Getwd()
-	if err != nil {
-		fmt.Println("Error getting current directory:", err)
-		return
-	}
-
-	fmt.Println("########### >>>>>>>>>>>> ", currentDir)
 
 	ctx := context.Background()
 	configs, err := configs.LoadConfig("/app")
