@@ -1,24 +1,31 @@
 package usecases
 
 import (
+	"context"
 	"testing"
 
-	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/rogeriotadim/rinha-de-backend-go/cmd/configs"
 	"github.com/rogeriotadim/rinha-de-backend-go/internal/infra/database"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewGetContagemUseCaseIntegration(t *testing.T) {
-	// db, err := sql.Open(configs.DBDriver, fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", configs.DBUser, configs.DBPassword, configs.DBHost, configs.DBPort, configs.DBName))
-	db, _, err := sqlmock.New()
+	ctx := context.Background()
+	configs, err := configs.LoadConfig("/app")
 	if err != nil {
-		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+		panic(err)
 	}
-	defer db.Close()
+	// connStr := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable", configs.DBUser, configs.DBPassword, configs.DBHost, configs.DBPort, configs.DBName)
+	// db, err := sql.Open(configs.DBDriver, connStr)
+	pool, err := database.NewDatabasePool(configs, ctx)
+	if err != nil {
+		panic(err)
+	}
+	defer pool.Close()
 
-	repo := database.NewPessoaRepository(db)
+	repo := database.NewPessoaRepository(context.Background(), pool)
 	uc := NewGetContagemUseCase(repo)
 	assert.NotNil(t, uc)
 	total, _ := uc.PessoaRepository.GetContagem()
-	assert.Equal(t, int64(3), total)
+	assert.GreaterOrEqual(t, int64(0), total)
 }

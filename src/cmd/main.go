@@ -2,17 +2,29 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"os"
 
 	"github.com/rogeriotadim/rinha-de-backend-go/cmd/configs"
 	"github.com/rogeriotadim/rinha-de-backend-go/internal/infra/database"
+	usecases "github.com/rogeriotadim/rinha-de-backend-go/internal/use_cases"
 
 	// mysql
 	_ "github.com/lib/pq"
 )
 
 func main() {
+	// Get the current working directory
+	currentDir, err := os.Getwd()
+	if err != nil {
+		fmt.Println("Error getting current directory:", err)
+		return
+	}
+
+	fmt.Println("########### >>>>>>>>>>>> ", currentDir)
+
 	ctx := context.Background()
-	configs, err := configs.LoadConfig(".")
+	configs, err := configs.LoadConfig("/app")
 	if err != nil {
 		panic(err)
 	}
@@ -23,17 +35,15 @@ func main() {
 		panic(err)
 	}
 	defer db.Close()
-	rows, err := db.Query(ctx, "SELECT count(id) as qtd FROM pessoas")
+	repoPessoas := database.NewPessoaRepository(ctx, db)
+	ucContagem := usecases.NewGetContagemUseCase(repoPessoas)
+
+	qtd, err := ucContagem.PessoaRepository.GetContagem()
 	if err != nil {
-		panic(err)
-	}
-	rows.Next()
-	var qtd *int64
-	if err := rows.Scan(&qtd); err != nil {
 		panic(err)
 	}
 
 	println("Vai CORINTHIANS!!!")
-	println(*qtd)
+	println(qtd)
 	// server.Run()
 }
